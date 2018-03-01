@@ -3,7 +3,7 @@
 var extend = require('zhf.extend');
 var getDomArray = require('zhf.get-dom-array');
 
-// 全选,不选,反选
+// 加减输入框
 function AddSubtractInput(opts) {
     this.opts = extend({
         add: null,
@@ -14,11 +14,7 @@ function AddSubtractInput(opts) {
         value: 1,
         max: 99999999,
         offClass: 'off',
-        callback: {
-            add: function add() {},
-            subtract: function subtract() {},
-            blur: function blur() {}
-        }
+        callback: function callback() {}
     }, opts);
     this.init();
 }
@@ -32,35 +28,65 @@ AddSubtractInput.prototype.init = function () {
 AddSubtractInput.prototype.power = function () {
     var self = this;
     var opts = self.opts;
-    var cb = opts.callback;
+    var callback = opts.callback;
     var add = getDomArray(opts.add)[0];
     var subtract = getDomArray(opts.subtract)[0];
     var input = getDomArray(opts.input)[0];
-    var step = opts.step;
-    var min = opts.min;
-    var value = opts.value;
-    var max = opts.max;
+    var step = Number(opts.step);
+    var min = Number(opts.min);
+    var value = Number(opts.value);
+    var max = Number(opts.max);
     var offClass = opts.offClass;
-    var cbAdd = cb.add;
-    var cbSubtract = cb.subtract;
-    var cbBlur = cb.blur;
-    // 初始化结构
-    if (value < min) {
-        value = min;
+
+    function renderValue() {
+        callback({ min: min, max: max, value: value });
+        add && add.classList.remove(offClass);
+        subtract && subtract.classList.remove(offClass);
+        // 初始化结构
+        if (max <= 0) {
+            max = min;
+        }
+        if (value <= min) {
+            value = min;
+            subtract && subtract.classList.add(offClass);
+        }
+        if (value >= max) {
+            value = max;
+            add && add.classList.add(offClass);
+        }
+        if (value === min && value === max) {
+            add && add.classList.add(offClass);
+            subtract && subtract.classList.add(offClass);
+            input && (input.readOnly = true);
+        }
+        input && (input.value = value);
     }
-    if (value > max) {
-        value = max;
+
+    renderValue();
+    if (add) {
+        add.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            value += step;
+            renderValue();
+        });
     }
-    if (max === 0) {}
-    if (value === min && value === max) {
-        add.classList.add(offClass);
-        subtract.classList.add(offClass);
-        input.readOnly = true;
+    if (subtract) {
+        subtract.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            value -= step;
+            renderValue();
+        });
     }
-    input.value = value;
-    if (add) {}
-    if (subtract) {}
-    if (input) {}
+    if (input) {
+        input.addEventListener('blur', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            value = Number(this.value);
+            renderValue();
+        });
+    }
 };
 
 module.exports = AddSubtractInput;
