@@ -28,7 +28,7 @@ AddSubtractInput.prototype.init = function () {
 AddSubtractInput.prototype.power = function () {
     var self = this;
     var opts = self.opts;
-    var callback = opts.callback;
+    var cbFn = opts.callback;
     var add = getDomArray(opts.add)[0];
     var subtract = getDomArray(opts.subtract)[0];
     var input = getDomArray(opts.input)[0];
@@ -39,7 +39,7 @@ AddSubtractInput.prototype.power = function () {
     var offClass = opts.offClass;
 
     function renderValue() {
-        callback({ min: min, max: max, value: value });
+        cbFn({ min: min, max: max, value: value });
         add && add.classList.remove(offClass);
         subtract && subtract.classList.remove(offClass);
         // 初始化结构
