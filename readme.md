@@ -1,6 +1,6 @@
 # 加减输入框
 ```
-const AddSubtractInput = require('../dist/index.min');
+const AddSubtractInput = require('zhf.add-subtract-input');
 new AddSubtractInput({
     add: '.add',
     subtract: '.subtract',
