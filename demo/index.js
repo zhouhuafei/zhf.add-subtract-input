@@ -7,7 +7,7 @@ new AddSubtractInput({
     min: 1,
     value: 1,
     max: 6,
-    offClass: 'off',
+    offClass: '__off',
     callback: function (json) {
         console.log(json);
     },
