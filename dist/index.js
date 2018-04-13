@@ -13,7 +13,7 @@ function AddSubtractInput(opts) {
         min: 1,
         value: 1,
         max: 99999999,
-        offClass: '__off',
+        offClass: '_off',
         callback: function callback() {}
     }, opts);
     this.init();
