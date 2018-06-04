@@ -2,9 +2,9 @@
 ```
 const AddSubtractInput = require('zhf.add-subtract-input');
 new AddSubtractInput({
-    add: '.add',
-    subtract: '.subtract',
-    input: '.input',
+    add: '.js-add',
+    subtract: '.js-subtract',
+    input: '.js-input',
     step: 1,
     min: 1,
     value: 1,
