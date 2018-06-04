@@ -54,36 +54,40 @@ AddSubtractInput.prototype.power = function () {
     if (!handleData.input || !handleData.add || !handleData.subtract) {
         return;
     }
-    handleData.input.value = self.handleValue(handleData.value);
-    self.handleStatus(handleData.value);
+    handleData.input.value = self.handleValue(); // 初始化值
+    self.handleStatus(); // 初始化状态
+    // 加
     handleData.add.addEventListener('click', function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
         handleData.oldValue = handleData.value;
         handleData.value += handleData.step;
-        self.setInputValue();
+        self.setInputValue(this);
     });
+    // 减
     handleData.subtract.addEventListener('click', function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
         handleData.oldValue = handleData.value;
         handleData.value -= handleData.step;
-        self.setInputValue();
+        self.setInputValue(this);
     });
+    // 直接改值
     handleData.input.addEventListener('blur', function (ev) {
         const dom = this;
         ev.preventDefault();
         ev.stopPropagation();
         handleData.oldValue = handleData.value;
         handleData.value = Number(dom.value) || 1;
-        self.setInputValue();
+        self.setInputValue(this);
     });
 };
 
 // 处理value
-AddSubtractInput.prototype.handleValue = function (value) {
+AddSubtractInput.prototype.handleValue = function () {
     const self = this;
     const handleData = self.handleData;
+    let value = handleData.value;
     if (handleData.max <= 0) {
         handleData.max = handleData.min;
     }
@@ -98,9 +102,10 @@ AddSubtractInput.prototype.handleValue = function (value) {
 };
 
 // 处理状态
-AddSubtractInput.prototype.handleStatus = function (value) {
+AddSubtractInput.prototype.handleStatus = function () {
     const self = this;
     const handleData = self.handleData;
+    const value = handleData.value;
     // 初始化结构
     handleData.add && handleData.add.classList.remove(handleData.offClass);
     handleData.subtract && handleData.subtract.classList.remove(handleData.offClass);
@@ -118,15 +123,15 @@ AddSubtractInput.prototype.handleStatus = function (value) {
 };
 
 // 设置input的value
-AddSubtractInput.prototype.setInputValue = function () {
+AddSubtractInput.prototype.setInputValue = function (dom) {
     const self = this;
     const handleData = self.handleData;
     if (!handleData.input || !handleData.add || !handleData.subtract) {
         return;
     }
-    let value = self.handleValue(handleData.value);
+    let value = self.handleValue();
     if (!handleData.isAsync) { // 同步
-        self.handleStatus(value);
+        self.handleStatus();
         handleData.input.value = value;
         handleData.cbFn({min: handleData.min, max: handleData.max, value: value});
     } else {
@@ -135,12 +140,13 @@ AddSubtractInput.prototype.setInputValue = function () {
             self.handleData.asyncHandleValue({
                 self: self,
                 handleData: handleData,
+                dom: dom,
                 theCallbackMustBeTriggered: function (isSuccess) {
                     if (!isSuccess) { // 异步修改输入框的值如果失败了，则还原以前的值。
                         value = handleData.oldValue;
                     }
                     handleData.value = value; // 更新handleData上value的值，这个值贯穿全场。
-                    self.handleStatus(value);
+                    self.handleStatus();
                     handleData.input.value = value;
                     delete handleData.isTriggerWhenAsync;
                     handleData.cbFn({min: handleData.min, max: handleData.max, value: value});

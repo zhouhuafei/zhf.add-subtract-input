@@ -28,30 +28,12 @@ new AddSubtractInput({
     value: 1,
     max: 6,
     offClass: '_off',
-    isAsync: true,
+    isAsync: true, // 开启异步修改值
     asyncHandleValue: function (json) {
-        // 异步的话，这里发送ajax
+        // 异步的话，这里发送ajax，把数量和id带过去，请求完毕触发内部回调。
         setTimeout(function (res) {
-            console.log(res);
-            const handleData = json.handleData;
-            const step = handleData.step;
-            let value = handleData.value;
-            if (res.status === 'success') {
-                if (json.type === 'add') {
-                    value += step;
-                } else if (json.type === 'subtract') {
-                    value -= step;
-                } else {
-                    value = json.dom.value;
-                }
-                json.self.handleValue(value);
-            } else {
-                if (json.type === 'blur') {
-                    json.self.handleValue(handleData.oldValue);
-                }
-            }
-            json.theCallbackMustBeTriggered();
-        }, 2000, {status: 'success'});
+            json.theCallbackMustBeTriggered(res.status === 'success'); // 异步修改值成功传入true,否则传入false
+        }, 1000, {status: 'success'});
     },
     callback: function (json) {
         console.log(json);
