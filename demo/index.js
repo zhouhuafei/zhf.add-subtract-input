@@ -20,9 +20,9 @@ new AddSubtractInput({
     subtract: '.js-subtract',
     input: '.js-input',
     step: 2,
-    min: 5,
-    value: 8,
-    max: 11,
+    min: 2,
+    value: 4,
+    max: 12,
     offClass: '_off',
     isAsync: true, // 开启异步修改值
     asyncHandleValue: function (json) {
