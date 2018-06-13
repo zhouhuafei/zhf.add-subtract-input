@@ -98,6 +98,9 @@ AddSubtractInput.prototype.redressValue = function () {
     const step = handleData.step;
     const max = handleData.max;
     const value = handleData.value;
+    // 步长为1时，min表示最小购买数，所以不需要被纠正。但是会自动纠正非法的max和value。其他纠正在handleValue函数里进行了纠正。
+    // 步长大于1时，表示必须按照步长的倍数购买。此时程序内部会自动纠正非法的min和max以及value。其他纠正在handleValue函数里进行了纠正。
+    // 当step大于1时，min参数会被强制纠正为step的值，所以当step不为1时，min参数可以不传参。但是还是建议加上，因为程序内部会自行纠正且并不是所有商品step都大于1。
     if (step > 1) {
         handleData.min = step; // 纠正min，如果值和步长不是倍数关系，则自动纠正
         handleData.max = max - max % step; // 纠正max，如果值和步长不是倍数关系，则自动纠正
@@ -127,7 +130,6 @@ AddSubtractInput.prototype.handleValue = function () {
 // 处理状态
 AddSubtractInput.prototype.handleStatus = function () {
     const self = this;
-    self.redressValue();
     const handleData = self.handleData;
     const value = handleData.value;
     // 初始化结构

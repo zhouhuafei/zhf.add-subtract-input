@@ -1,4 +1,5 @@
 const AddSubtractInput = require('../dist/index.min');
+// 步长为1时，min表示最小购买数，所以不需要被纠正。但是会自动纠正非法的max和value。
 // new AddSubtractInput({
 //     add: '.js-add',
 //     subtract: '.js-subtract',
@@ -12,14 +13,16 @@ const AddSubtractInput = require('../dist/index.min');
 //         console.log(json);
 //     },
 // });
+
+// 步长大于1时，表示必须按照步长的倍数购买。此时程序内部会自动纠正非法的min和max以及value
 new AddSubtractInput({
     add: '.js-add',
     subtract: '.js-subtract',
     input: '.js-input',
-    step: 1,
-    min: 1,
-    value: 1,
-    max: 6,
+    step: 2,
+    min: 5,
+    value: 8,
+    max: 11,
     offClass: '_off',
     isAsync: true, // 开启异步修改值
     asyncHandleValue: function (json) {
