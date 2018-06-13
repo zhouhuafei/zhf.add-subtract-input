@@ -32,11 +32,19 @@ AddSubtractInput.prototype.render = function () {
     handleData.add = getDomArray(opts.add)[0];
     handleData.subtract = getDomArray(opts.subtract)[0];
     handleData.input = getDomArray(opts.input)[0];
-    handleData.step = Number(opts.step);
-    handleData.min = Number(opts.min);
-    handleData.value = Number(opts.value) || 1;
+    // step 最小为1
+    var step = Number(opts.step) || 1;
+    handleData.step = step < 1 ? 1 : step;
+    // min 最小为1
+    var min = Number(opts.min) || 1;
+    handleData.min = min < 1 ? 1 : min;
+    // value 最小为1
+    var value = Number(opts.value) || 1;
+    handleData.value = value < 1 ? 1 : value;
     handleData.oldValue = handleData.value;
-    handleData.max = Number(opts.max);
+    // max 最小为1
+    var max = Number(opts.max) || 1;
+    handleData.max = max < 1 ? 1 : max;
     handleData.offClass = opts.offClass;
     handleData.isAsync = opts.isAsync;
     self.handleData = handleData;
@@ -84,18 +92,34 @@ AddSubtractInput.prototype.power = function () {
     });
 };
 
+// 纠正value，当步长不为1，则表明购买必须按照步长的倍数进行购买
+AddSubtractInput.prototype.redressValue = function () {
+    var self = this;
+    var handleData = self.handleData;
+    var step = handleData.step;
+    var max = handleData.max;
+    var value = handleData.value;
+    if (step > 1) {
+        handleData.min = step; // 纠正min，如果值和步长不是倍数关系，则自动纠正
+        handleData.max = max - max % step; // 纠正max，如果值和步长不是倍数关系，则自动纠正
+        handleData.value = Math.floor(value / step) * step; // 纠正value，如果值和步长不是倍数关系，则自动纠正
+    }
+};
+
 // 处理value
 AddSubtractInput.prototype.handleValue = function () {
     var self = this;
+    self.redressValue();
     var handleData = self.handleData;
     var value = handleData.value;
-    if (handleData.max <= 0) {
+    if (handleData.max < handleData.min) {
+        // max小于最小值则等于最小值
         handleData.max = handleData.min;
     }
-    if (value <= handleData.min) {
+    if (value < handleData.min) {
         value = handleData.min;
     }
-    if (value >= handleData.max) {
+    if (value > handleData.max) {
         value = handleData.max;
     }
     handleData.value = value; // 更新handleData上value的值，这个值贯穿全场。
@@ -105,21 +129,22 @@ AddSubtractInput.prototype.handleValue = function () {
 // 处理状态
 AddSubtractInput.prototype.handleStatus = function () {
     var self = this;
+    self.redressValue();
     var handleData = self.handleData;
     var value = handleData.value;
     // 初始化结构
-    handleData.add && handleData.add.classList.remove(handleData.offClass);
-    handleData.subtract && handleData.subtract.classList.remove(handleData.offClass);
+    handleData.add.classList.remove(handleData.offClass);
+    handleData.subtract.classList.remove(handleData.offClass);
     if (value <= handleData.min) {
-        handleData.subtract && handleData.subtract.classList.add(handleData.offClass);
+        handleData.subtract.classList.add(handleData.offClass);
     }
     if (value >= handleData.max) {
-        handleData.add && handleData.add.classList.add(handleData.offClass);
+        handleData.add.classList.add(handleData.offClass);
     }
-    if (value === handleData.min && value === handleData.max) {
-        handleData.add && handleData.add.classList.add(handleData.offClass);
-        handleData.subtract && handleData.subtract.classList.add(handleData.offClass);
-        handleData.input && (handleData.input.readOnly = true);
+    if (handleData.min === handleData.max) {
+        handleData.add.classList.add(handleData.offClass);
+        handleData.subtract.classList.add(handleData.offClass);
+        handleData.input.readOnly = true;
     }
 };
 

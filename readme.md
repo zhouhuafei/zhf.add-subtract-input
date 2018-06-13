@@ -33,7 +33,7 @@ new AddSubtractInput({
         // 异步的话，这里发送ajax，把数量和id带过去，请求完毕触发内部回调。
         setTimeout(function (res) {
             json.theCallbackMustBeTriggered(res.status === 'success'); // 异步修改值成功传入true,否则传入false
-        }, 1000, {status: 'success'});
+        }, 500, {status: 'success'});
     },
     callback: function (json) {
         console.log(json);
