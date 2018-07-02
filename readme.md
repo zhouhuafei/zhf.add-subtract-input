@@ -11,7 +11,7 @@ new AddSubtractInput({
     min: 1,
     value: 1,
     max: 6,
-    offClass: '_off',
+    offClass: '--off',
     callback: function (json) {
         console.log(json);
     },
@@ -32,7 +32,7 @@ new AddSubtractInput({
     min: 3,
     value: 6,
     max: 9,
-    offClass: '_off',
+    offClass: '--off',
     isAsync: true, // 开启异步修改值
     asyncHandleValue: function (json) {
         // 异步的话，这里发送ajax，把数量和id带过去，请求完毕触发内部回调。
