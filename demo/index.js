@@ -8,7 +8,7 @@ const AddSubtractInput = require('../dist/index.min');
 //     min: 1,
 //     value: 1,
 //     max: 6,
-//     offClass: '--off',
+//     offClass: '_off',
 //     callback: function (json) {
 //         console.log(json);
 //     },
@@ -23,7 +23,7 @@ new AddSubtractInput({
     min: 2,
     value: 4,
     max: 12,
-    offClass: '--off',
+    offClass: '_off',
     isAsync: true, // 开启异步修改值
     asyncHandleValue: function (json) {
         // 异步的话，这里发送ajax，把数量和id带过去，请求完毕触发内部回调。

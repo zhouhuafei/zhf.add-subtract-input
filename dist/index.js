@@ -13,7 +13,7 @@ function AddSubtractInput(opts) {
         min: 1,
         value: 1,
         max: 99999999,
-        offClass: '--off',
+        offClass: '_off',
         isAsync: false,
         asyncHandleValue: function asyncHandleValue() {// 异步加减输入框里的值
         },
