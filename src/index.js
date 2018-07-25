@@ -17,6 +17,8 @@ function AddSubtractInput(opts) {
         },
         callback: function () {
         },
+        subtractClickBefore: function () { // 减的按钮点击
+        },
     }, opts);
     this.init();
 }
