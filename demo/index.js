@@ -31,7 +31,10 @@ new AddSubtractInput({
             json.theCallbackMustBeTriggered(res.status === 'success'); // 异步修改值成功传入true,否则传入false
         }, 500, {status: 'success'});
     },
-    callback: function (json) {
+    callback: function (json) { // 数值被处理之后的回调
+        console.log(json);
+    },
+    callbackSubtractBefore: function (json) { // 点击减的时候，数值未被处理之前的回调。
         console.log(json);
     },
 });

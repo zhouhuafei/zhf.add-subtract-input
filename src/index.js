@@ -15,9 +15,9 @@ function AddSubtractInput(opts) {
         isAsync: false,
         asyncHandleValue: function () { // 异步加减输入框里的值
         },
-        callback: function () {
+        callback: function () { // 数值被处理之后的回调
         },
-        subtractClickBefore: function () { // 减的按钮点击
+        callbackSubtractBefore: function () { // 点击减的时候，数值未被处理之前的回调。
         },
     }, opts);
     this.init();
@@ -80,6 +80,7 @@ AddSubtractInput.prototype.power = function () {
         ev.stopPropagation();
         handleData.oldValue = handleData.value;
         handleData.value -= handleData.step;
+        self.opts.callbackSubtractBefore({dom: this, oldValue: handleData.oldValue, value: handleData.value});
         self.setInputValue(this);
     });
     // 直接改值
